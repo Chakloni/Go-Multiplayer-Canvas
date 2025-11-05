@@ -10,17 +10,12 @@ import (
 )
 
 var upgrader = websocket.Upgrader{
-	CheckOrigin: func(r *http.Request) bool { 
-		return true 
+	CheckOrigin: func(r *http.Request) bool {
+		return true
 	},
 }
 
-type Client struct {
-	conn *websocket.Conn
-	send chan []byte
-}
-
-var clients = make(map[*Client]bool)
+var clients = make(map[*websocket.Conn]bool)
 var broadcast = make(chan []byte)
 var mu sync.Mutex
 
@@ -44,9 +39,8 @@ func handleConnections(w http.ResponseWriter, r *http.Request) {
 	}
 	defer ws.Close()
 
-	client := &Client{conn: ws, send: make(chan []byte)}
 	mu.Lock()
-	clients[client] = true
+	clients[ws] = true
 	mu.Unlock()
 
 	log.Println("🟢 New client connected 🙋")
@@ -56,7 +50,7 @@ func handleConnections(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			log.Println("🔴 Client disconnected 👋:", err)
 			mu.Lock()
-			delete(clients, client)
+			delete(clients, ws)
 			mu.Unlock()
 			break
 		}
@@ -69,13 +63,10 @@ func handleMessages() {
 		msg := <-broadcast
 		mu.Lock()
 		for client := range clients {
-			select {
-			case client.send <- msg:
-				go func(c *Client, m []byte) {
-					c.conn.WriteMessage(websocket.TextMessage, m)
-				}(client, msg)
-			default:
-				close(client.send)
+			err := client.WriteMessage(websocket.TextMessage, msg)
+			if err != nil {
+				log.Println("Error sending message:", err)
+				client.Close()
 				delete(clients, client)
 			}
 		}
