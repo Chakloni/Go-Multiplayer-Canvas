@@ -7,7 +7,7 @@ function resizeCanvas() {
     const container = canvas.parentElement;
     canvas.width = container.clientWidth - 40;
     canvas.height = container.clientHeight - 80;
-    
+
     // Dibujar fondo blanco
     ctx.fillStyle = 'white';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -48,16 +48,30 @@ socket.onerror = (error) => {
 
 const usernameScreen = document.getElementById("usernameScreen");
 const usernameBtn = document.getElementById("usernameBtn");
+const usuarioValue = document.getElementById("usuario");
 
-function createUsername(){
+function createUsername() {
     const usuarioValue = document.getElementById("usuario");
-    localStorage.setItem("usuarioValue", usuarioValue.value);
 
-    usernameScreen.style.display = "none";
+    if (usuarioValue.value.trim().length < 3) {
+        // alert("Your username should be at least 3 characters long")
+
+        usuarioValue.classList.add('error');
+
+        // remove the class after the animation completes
+        setTimeout(function () {
+            usuarioValue.classList.remove('error');
+        }, 300);
+
+        e.preventDefault();
+    } else {
+        localStorage.setItem("usuarioValue", usuarioValue.value);
+        usernameScreen.style.display = "none";
+    }
 }
 
 usernameBtn.addEventListener('click', createUsername);
-usernameBtn.addEventListener('keypress', (e) => {
+usuarioValue.addEventListener('keypress', (e) => {
     if (e.key === 'Enter') {
         createUsername();
     }
@@ -66,13 +80,9 @@ usernameBtn.addEventListener('keypress', (e) => {
 socket.onmessage = (event) => {
     try {
         const data = JSON.parse(event.data);
-        /* console.log("data.msg: ", data.message.msg);
-        console.log("data.username: ", data.message.username); */
 
         // Si es un mensaje de chat
         if (data.type === 'chat') {
-            console.log(data.sender)
-            console.log(data.message)
             addMessage(data.message.username, data.message.msg);
             return;
         }
@@ -88,10 +98,10 @@ socket.onmessage = (event) => {
         const w = canvas.width;
         const h = canvas.height;
         drawLine(
-            data.x0 * w, 
-            data.y0 * h, 
-            data.x1 * w, 
-            data.y1 * h, 
+            data.x0 * w,
+            data.y0 * h,
+            data.x1 * w,
+            data.y1 * h,
             data.color || '#333',
             data.lineWidth || 3,
             false
@@ -113,13 +123,13 @@ canvas.addEventListener("mouseout", () => (drawing = false));
 canvas.addEventListener("mousemove", (e) => {
     if (!drawing) return;
     const [x, y] = getMousePos(e);
-    
+
     if (currentTool === 'brush') {
         drawLine(lastX, lastY, x, y, currentColor, lineWidth, true);
     } else if (currentTool === 'eraser') {
         drawLine(lastX, lastY, x, y, 'white', lineWidth * 3, true);
     }
-    
+
     [lastX, lastY] = [x, y];
 });
 
@@ -134,13 +144,13 @@ canvas.addEventListener('touchmove', (e) => {
     e.preventDefault();
     if (!drawing) return;
     const [x, y] = getMousePos(e.touches[0]);
-    
+
     if (currentTool === 'brush') {
         drawLine(lastX, lastY, x, y, currentColor, lineWidth, true);
     } else if (currentTool === 'eraser') {
         drawLine(lastX, lastY, x, y, 'white', lineWidth * 3, true);
     }
-    
+
     [lastX, lastY] = [x, y];
 });
 
@@ -151,7 +161,7 @@ function getMousePos(e) {
     const rect = canvas.getBoundingClientRect();
     const scaleX = canvas.width / rect.width;
     const scaleY = canvas.height / rect.height;
-    
+
     return [
         (e.clientX - rect.left) * scaleX,
         (e.clientY - rect.top) * scaleY
@@ -213,7 +223,7 @@ document.getElementById('clearBtn').addEventListener('click', () => {
     if (confirm('¿Estás seguro de que quieres limpiar el lienzo?')) {
         ctx.fillStyle = 'white';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
-        
+
         // Opcional: enviar comando de limpiar a otros clientes
         if (socket.readyState === WebSocket.OPEN) {
             socket.send(JSON.stringify({ type: 'clear' }));
@@ -237,31 +247,31 @@ const sendButton = document.getElementById('send');
 function addMessage(sender, content) {
     const messageDiv = document.createElement('div');
 
-    if(sender == localStorage.getItem("usuarioValue")){
+    if (sender == localStorage.getItem("usuarioValue")) {
         messageDiv.className = 'message own'
-    }else{
+    } else {
         messageDiv.className = 'message other'
     }
-    
+
     const messageHeader = document.createElement('div');
     messageHeader.className = 'message-header';
-    
+
     const senderSpan = document.createElement('span');
     senderSpan.className = 'message-sender';
     senderSpan.textContent = sender;
-    
+
     const timeSpan = document.createElement('span');
     timeSpan.className = 'message-time';
     const now = new Date();
     timeSpan.textContent = `${now.getHours()}:${now.getMinutes().toString().padStart(2, '0')}`;
-    
+
     messageHeader.appendChild(senderSpan);
     messageHeader.appendChild(timeSpan);
-    
+
     const contentDiv = document.createElement('div');
     contentDiv.className = 'message-content';
     contentDiv.textContent = content;
-    
+
     messageDiv.appendChild(messageHeader);
     messageDiv.appendChild(contentDiv);
 
@@ -288,7 +298,7 @@ function sendMessage() {
     const msg = input.value.trim();
     const username = localStorage.getItem("usuarioValue");
 
-    const message = {"msg":msg, "username":username}
+    const message = { "msg": msg, "username": username }
 
     if (message && socket.readyState === WebSocket.OPEN) {
         // Enviar mensaje al servidor
@@ -296,7 +306,7 @@ function sendMessage() {
             type: 'chat',
             message: message
         }));
-        
+
         // Mostrar mensaje localmente inmediatamente
         //addMessage(localStorage.getItem("usuarioValue"), message);
         input.value = '';
