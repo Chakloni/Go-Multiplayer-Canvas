@@ -26,7 +26,9 @@ let currentTool = 'brush';
 let lineWidth = 3;
 
 // Connect to WebSocket
-const socket = new WebSocket(`ws://${location.host}/ws`);
+const protocol = location.protocol === "https:" ? "wss" : "ws";
+const socket = new WebSocket(`${protocol}://${location.host}/ws`);
+
 
 // Handle incoming strokes
 socket.onopen = () => {
