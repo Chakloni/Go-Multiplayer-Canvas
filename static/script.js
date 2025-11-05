@@ -46,15 +46,34 @@ socket.onerror = (error) => {
     addSystemMessage("Error de conexión");
 };
 
+const usernameScreen = document.getElementById("usernameScreen");
+const usernameBtn = document.getElementById("usernameBtn");
+
+function createUsername(){
+    const usuarioValue = document.getElementById("usuario");
+    localStorage.setItem("usuarioValue", usuarioValue.value);
+
+    usernameScreen.style.display = "none";
+}
+
+usernameBtn.addEventListener('click', createUsername);
+usernameBtn.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+        createUsername();
+    }
+});
+
 socket.onmessage = (event) => {
     try {
         const data = JSON.parse(event.data);
+        /* console.log("data.msg: ", data.message.msg);
+        console.log("data.username: ", data.message.username); */
 
         // Si es un mensaje de chat
         if (data.type === 'chat') {
             console.log(data.sender)
             console.log(data.message)
-            addMessage(data.sender, data.message, false);
+            addMessage(data.message.username, data.message.msg);
             return;
         }
 
@@ -215,16 +234,21 @@ const chatBox = document.getElementById('chatBox');
 const input = document.getElementById('input');
 const sendButton = document.getElementById('send');
 
-function addMessage(sender, content, isOwn = false) {
+function addMessage(sender, content) {
     const messageDiv = document.createElement('div');
-    messageDiv.className = isOwn ? 'message own' : 'message other';
+
+    if(sender == localStorage.getItem("usuarioValue")){
+        messageDiv.className = 'message own'
+    }else{
+        messageDiv.className = 'message other'
+    }
     
     const messageHeader = document.createElement('div');
     messageHeader.className = 'message-header';
     
     const senderSpan = document.createElement('span');
     senderSpan.className = 'message-sender';
-    senderSpan.textContent = isOwn ? 'Tú' : sender;
+    senderSpan.textContent = sender;
     
     const timeSpan = document.createElement('span');
     timeSpan.className = 'message-time';
@@ -240,7 +264,7 @@ function addMessage(sender, content, isOwn = false) {
     
     messageDiv.appendChild(messageHeader);
     messageDiv.appendChild(contentDiv);
-    
+
     chatBox.appendChild(messageDiv);
     chatBox.scrollTop = chatBox.scrollHeight;
 }
@@ -261,7 +285,11 @@ function updateOnlineUsers(count) {
 }
 
 function sendMessage() {
-    const message = input.value.trim();
+    const msg = input.value.trim();
+    const username = localStorage.getItem("usuarioValue");
+
+    const message = {"msg":msg, "username":username}
+
     if (message && socket.readyState === WebSocket.OPEN) {
         // Enviar mensaje al servidor
         socket.send(JSON.stringify({
@@ -270,7 +298,7 @@ function sendMessage() {
         }));
         
         // Mostrar mensaje localmente inmediatamente
-        addMessage('Usuario', message, true);
+        //addMessage(localStorage.getItem("usuarioValue"), message);
         input.value = '';
     }
 }

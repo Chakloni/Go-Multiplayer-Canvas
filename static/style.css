@@ -183,6 +183,46 @@ canvas {
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
     backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.1);
+    z-index: 10;
+    position: relative;
+}
+
+.chat-container2 {
+    width: 320px;
+    display: flex;
+    flex-direction: column;
+    background: rgba(30, 30, 30, 0.7);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    justify-content: center;
+    align-items: center;
+    gap: 3rem;
+    z-index: 20;
+    position: absolute;
+    height: 100%;
+}
+
+#usuario {
+    padding: 0.8rem 1rem;
+    border: none;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    font-size: 1rem;
+}
+
+#usernameBtn {
+    padding: 0.8rem;
+    background: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-weight: 600;
 }
 
 .chat-header {
@@ -243,6 +283,7 @@ canvas {
     padding: 0.8rem;
     border-radius: 8px;
     max-width: 85%;
+    min-width: 40%;
     animation: fadeIn 0.3s ease;
 }
 
@@ -284,13 +325,14 @@ canvas {
 
 .message-header {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-start;
     margin-bottom: 0.3rem;
     font-size: 0.8rem;
 }
 
 .message-sender {
     font-weight: 600;
+    padding-right: .5rem;
 }
 
 .message-time {
@@ -328,7 +370,7 @@ canvas {
 }
 
 #send {
-    padding: 0.8rem 1.2rem;
+    padding: 0.8rem;
     background: var(--primary);
     color: white;
     border: none;
