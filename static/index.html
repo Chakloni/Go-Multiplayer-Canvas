@@ -10,7 +10,7 @@
 
 <body>
     <div class="header">
-        <h1><span>🎨</span> Canvas Multiplayer</h1>
+        <h1><span>🎨</span> Multiplayer Canvas</h1>
         <div class="controls">
             <div class="color-picker">
                 <div class="color-option active" style="background-color: #e74c3c;" data-color="#e74c3c"></div>
@@ -23,10 +23,10 @@
                 <div class="color-option" style="background-color: #000000;" data-color="#000000"></div>
             </div>
             <button class="btn secondary" id="clearBtn">
-                <span>🗑️</span> Limpiar
+                <span>🗑️</span> Clean
             </button>
             <button class="btn" id="saveBtn">
-                <span>💾</span> Guardar
+                <span>💾</span> Save
             </button>
         </div>
     </div>
@@ -34,7 +34,7 @@
     <div class="container">
         <div class="canvas-container">
             <div class="canvas-header">
-                <div class="canvas-title">Lienzo Compartido</div>
+                <div class="canvas-title">Shared Canvas</div>
                 <div class="tools">
                     <button class="tool-btn active" data-tool="brush" title="Pincel">🖌️</button>
                     <button class="tool-btn" data-tool="eraser" title="Borrador">🧽</button>
@@ -49,44 +49,23 @@
                 <div class="chat-title">Chat</div>
                 <div class="online-users">
                     <div class="online-indicator"></div>
-                    <span>3 usuarios en línea</span>
+                    <span id="Usuarios"># users online</span>
                 </div>
             </div>
             <div class="chat-box" id="chatBox">
                 <div class="message system">
-                    Bienvenido al Canvas Multiplayer. ¡Dibuja y chatea con otros usuarios en tiempo real!
-                </div>
-                <div class="message other">
-                    <div class="message-header">
-                        <span class="message-sender">Artista23</span>
-                        <span class="message-time">10:24</span>
-                    </div>
-                    <div class="message-content">¡Hola a todos! ¿Qué están dibujando?</div>
-                </div>
-                <div class="message own">
-                    <div class="message-header">
-                        <span class="message-sender">Tú</span>
-                        <span class="message-time">10:25</span>
-                    </div>
-                    <div class="message-content">¡Hola! Estoy probando la aplicación, es genial.</div>
-                </div>
-                <div class="message other">
-                    <div class="message-header">
-                        <span class="message-sender">DibujantePro</span>
-                        <span class="message-time">10:26</span>
-                    </div>
-                    <div class="message-content">Me encanta la paleta de colores, muy completa.</div>
+                    Welcome to the online Multiplayer Canvas. Draw anc chat with other artists in real-time!
                 </div>
             </div>
             <div class="chat-input">
-                <input type="text" id="input" placeholder="Escribe un mensaje...">
+                <input type="text" id="input" placeholder="Say something!">
                 <button id="send">Enviar</button>
             </div>
         </div>
     </div>
 
     <div class="footer">
-        Canvas Multiplayer &copy; 2023 - Dibuja y chatea en tiempo real
+        Multiplayer Canvas &copy; 2025 - Draw and Chat!
     </div>
     <script src="script.js"></script>
 </body>
