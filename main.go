@@ -11,9 +11,7 @@ import (
 )
 
 var upgrader = websocket.Upgrader{
-	CheckOrigin: func(r *http.Request) bool {
-		return true
-	},
+	CheckOrigin: func(r *http.Request) bool { return true },
 }
 
 var clients = make(map[*websocket.Conn]bool)
@@ -33,7 +31,7 @@ func main() {
 		port = "8080"
 	}
 
-	fmt.Printf("🎨 Server running on http://localhost:%s\n", port)
+	fmt.Println("🎨 Server running on port", port)
 	log.Fatal(http.ListenAndServe(":"+port, nil))
 }
 
@@ -71,7 +69,7 @@ func handleMessages() {
 		for client := range clients {
 			err := client.WriteMessage(websocket.TextMessage, msg)
 			if err != nil {
-				log.Println("Error sending message:", err)
+				log.Println("Error sending:", err)
 				client.Close()
 				delete(clients, client)
 			}
