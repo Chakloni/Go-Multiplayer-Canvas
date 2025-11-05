@@ -21,7 +21,7 @@ window.addEventListener('resize', resizeCanvas);
 let drawing = false;
 let lastX = 0;
 let lastY = 0;
-let currentColor = '#e74c3c';
+let currentColor = '#000000';
 let currentTool = 'brush';
 let lineWidth = 3;
 
