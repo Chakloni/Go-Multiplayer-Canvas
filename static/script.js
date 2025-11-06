@@ -57,13 +57,19 @@ function createUsername() {
         // alert("Your username should be at least 3 characters long")
 
         usuarioValue.classList.add('error');
+        usuarioValue.style.border = "red 1px solid"
 
-        // remove the class after the animation completes
+        const inputNAlert = document.getElementById("inputNAlert");
+
+        const spanAlert = document.createElement("span")
+        spanAlert.classList.add("spanAlert")
+        spanAlert.innerText = "Username must be at least 3 characters long"
+
+        inputNAlert.insertBefore(spanAlert, usuarioValue);
+
         setTimeout(function () {
             usuarioValue.classList.remove('error');
         }, 300);
-
-        e.preventDefault();
     } else {
         localStorage.setItem("usuarioValue", usuarioValue.value);
         usernameScreen.style.display = "none";
