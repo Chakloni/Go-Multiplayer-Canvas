@@ -86,12 +86,6 @@ usuarioValue.addEventListener('keypress', (e) => {
 socket.onmessage = (event) => {
     try {
         const data = JSON.parse(event.data);
-        const usuariosSpan = document.getElementById("Usuarios");
-
-        if (data.type === "userCount") {
-            usuariosSpan.textContent = data.content;
-            return;
-        }
 
         // Si es un mensaje de chat
         if (data.type === 'chat') {

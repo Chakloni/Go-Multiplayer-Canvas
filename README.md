@@ -136,7 +136,7 @@ go handleMessages()
 
 ---
 
-## 🪄 Future Improvements
+## 💡 Future Improvements
 
 - 🗂️ Canvas persistence (save state on server or DB).  
 - 🔐 User authentication.  
