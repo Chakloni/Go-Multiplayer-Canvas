@@ -1,61 +1,61 @@
 # 🎨 Multiplayer Canvas
 
-**Multiplayer Canvas** es una aplicación web colaborativa que permite a múltiples usuarios dibujar y chatear en tiempo real sobre un mismo lienzo compartido.  
-El backend está desarrollado en **Go (Golang)** utilizando **WebSockets**, mientras que el frontend está hecho en **HTML, CSS y JavaScript puro**.
+**Multiplayer Canvas** is a collaborative web application that allows multiple users to draw and chat in real time on a shared canvas.  
+The backend is built with **Go (Golang)** using **WebSockets**, and the frontend is made with **HTML, CSS, and pure JavaScript**.
 
 ---
 
-## 🚀 Características principales
+## 🚀 Main Features
 
-- 🎨 **Lienzo compartido en tiempo real**: todos los usuarios ven los trazos al instante.  
-- 💬 **Chat integrado**: permite conversar mientras se dibuja.  
-- 🧹 **Herramientas básicas**: pincel, borrador y línea.  
-- 🌈 **Selector de color** y grosor del trazo.  
-- 💾 **Guardar dibujo** como imagen PNG.  
-- 👥 **Indicador de usuarios conectados**.  
-- 📱 **Diseño adaptable (responsive)** para móviles y pantallas pequeñas.
+- 🎨 **Real-time shared canvas**: every stroke is instantly visible to all users.  
+- 💬 **Integrated chat**: communicate while drawing.  
+- 🧹 **Basic tools**: brush, eraser, and line.  
+- 🌈 **Color picker** and adjustable stroke thickness.  
+- 💾 **Save your drawing** as a PNG image.  
+- 👥 **Connected users indicator**.  
+- 📱 **Responsive design** for mobile and small screens.
 
 ---
 
-## 🧩 Estructura del proyecto
+## 🧩 Project Structure
 
 ```
 📦 multiplayer-canvas
-├── main.go                # Servidor principal en Go (maneja WebSockets y archivos estáticos)
+├── main.go                # Main Go server (handles WebSockets and static files)
 ├── static/
-│   ├── index.html         # Interfaz principal
-│   ├── script.js          # Lógica de dibujo y chat
-│   └── style.css          # Estilos del frontend
-└── README.md              # Este archivo
+│   ├── index.html         # Main UI
+│   ├── script.js          # Drawing and chat logic
+│   └── style.css          # Frontend styles
+└── README.md              # This file
 ```
 
 ---
 
-## ⚙️ Requisitos previos
+## ⚙️ Requirements
 
-Antes de ejecutar el proyecto, asegúrate de tener instalado:
+Before running the project, make sure you have installed:
 
 - [Go 1.20+](https://go.dev/dl/)
-- Navegador web moderno (Chrome, Firefox, Edge)
-- Opcional: [Render](https://render.com/), [Railway](https://railway.app/), o cualquier servicio compatible con Go para desplegarlo.
+- Modern web browser (Chrome, Firefox, Edge)
+- Optional: [Render](https://render.com/), [Railway](https://railway.app/), or any Go-compatible hosting service
 
 ---
 
-## 🧠 Funcionamiento técnico
+## 🧠 Technical Overview
 
 ### Backend (Go)
-El servidor:
-- Sirve archivos estáticos desde la carpeta `./static`.
-- Administra las conexiones WebSocket (`/ws`).
-- Mantiene una lista de clientes activos en memoria.
-- Difunde cada mensaje o trazo a todos los clientes conectados.
+The server:
+- Serves static files from the `./static` directory.
+- Manages WebSocket connections (`/ws` endpoint).
+- Keeps a list of active clients in memory.
+- Broadcasts each message or stroke to all connected clients.
 
-Flujo principal:
-1. El cliente se conecta vía WebSocket.
-2. Cada mensaje recibido (ya sea de chat o trazo) se retransmite a todos.
-3. Cuando un cliente se desconecta, se elimina del registro de usuarios.
+Main flow:
+1. Client connects via WebSocket.  
+2. Each received message (chat or stroke) is broadcast to everyone.  
+3. When a client disconnects, it’s removed from the user registry.
 
-Archivo clave: [`main.go`](./main.go)
+Key file: [`main.go`](./main.go)
 ```go
 http.Handle("/", http.FileServer(http.Dir("./static")))
 http.HandleFunc("/ws", handleConnections)
@@ -65,48 +65,48 @@ go handleMessages()
 ---
 
 ### Frontend (HTML + JS + CSS)
-- `index.html` define la estructura de la interfaz con el lienzo y el chat.
-- `script.js` gestiona los eventos del mouse/táctiles, la conexión WebSocket y la sincronización del dibujo/chat.
-- `style.css` proporciona una estética moderna con un tema oscuro y acentos de color.
+- `index.html` defines the layout with canvas and chat.  
+- `script.js` manages mouse/touch events, WebSocket communication, and synchronization.  
+- `style.css` provides a clean dark theme with color accents.
 
 ---
 
-## 💻 Ejecución local
+## 💻 Run Locally
 
-1. Clona este repositorio:
+1. Clone this repository:
    ```bash
-   git clone https://github.com/tuusuario/multiplayer-canvas.git
+   git clone https://github.com/yourusername/multiplayer-canvas.git
    cd multiplayer-canvas
    ```
 
-2. Ejecuta el servidor Go:
+2. Run the Go server:
    ```bash
-   go run .
+   go run main.go
    ```
 
-3. Abre tu navegador en:
+3. Open your browser at:
    ```
    http://localhost:8080
    ```
 
-4. Conecta múltiples pestañas o dispositivos y empieza a dibujar 🎨
+4. Open multiple tabs or devices and start drawing 🎨
 
 ---
 
-## 🌐 Despliegue en Render / Railway
+## 🌐 Deploy on Render / Railway
 
 ### Render
-1. Crea un nuevo servicio web en [Render](https://render.com/).
-2. Sube tu repositorio o conéctalo a GitHub.
-3. Usa este comando de build:
+1. Create a new web service on [Render](https://render.com/).  
+2. Upload your repo or connect it to GitHub.  
+3. Build command:
    ```bash
    go build -o app .
    ```
-4. Comando de ejecución:
+4. Start command:
    ```bash
    ./app
    ```
-5. Render asignará un `PORT` automáticamente — el servidor ya lo detecta con:
+5. Render automatically assigns a `PORT` — the server handles it with:
    ```go
    port := os.Getenv("PORT")
    if port == "" {
@@ -116,36 +116,36 @@ go handleMessages()
 
 ---
 
-## 🧰 Tecnologías utilizadas
+## 🧰 Technologies Used
 
-| Tecnología | Uso |
-|-------------|-----|
-| **Go (Golang)** | Backend y servidor WebSocket |
-| **Gorilla WebSocket** | Manejo de conexiones en tiempo real |
-| **HTML5 Canvas** | Dibujo compartido en el navegador |
-| **CSS3** | Diseño visual y responsividad |
-| **JavaScript (ES6)** | Lógica del chat, dibujo y sincronización |
+| Technology | Purpose |
+|-------------|----------|
+| **Go (Golang)** | Backend and WebSocket server |
+| **Gorilla WebSocket** | Real-time connection handling |
+| **HTML5 Canvas** | Collaborative drawing on the web |
+| **CSS3** | Visual design and responsiveness |
+| **JavaScript (ES6)** | Drawing logic, chat, and synchronization |
 
 ---
 
-## 🧑‍💻 Autor
+## 🧑‍💻 Author
 
 **Edgar Joel Villela Castañeda**  
 📧 [edjovilellaca@ittepic.edu.mx]  
-💻 Proyecto académico y demostrativo de colaboración en tiempo real con Go y WebSockets.
+💻 Academic and demo project showcasing real-time collaboration using Go and WebSockets.
 
 ---
 
-## 🪄 Posibles mejoras futuras
+## 🪄 Future Improvements
 
-- 🗂️ Persistencia del lienzo (guardar estado en servidor o BD).  
-- 🔐 Autenticación de usuarios.  
-- 🖼️ Galería de dibujos compartidos.  
-- 💬 Chat con historial.  
-- ✏️ Herramientas adicionales (formas, relleno, texto, grosor variable).
+- 🗂️ Canvas persistence (save state on server or DB).  
+- 🔐 User authentication.  
+- 🖼️ Shared drawing gallery.  
+- 💬 Chat history.  
+- ✏️ Extra tools (shapes, fill, text, variable thickness).
 
 ---
 
-## 📄 Licencia
+## 📄 License
 
-Este proyecto se distribuye bajo la licencia **MIT**, por lo que puedes usarlo, modificarlo y compartirlo libremente con atribución.
+This project is released under the **MIT License**, meaning you can freely use, modify, and share it with proper attribution.
