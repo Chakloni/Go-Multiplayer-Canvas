@@ -89,7 +89,7 @@ socket.onmessage = (event) => {
         const usuariosSpan = document.getElementById("Usuarios");
 
         if (data.type === "userCount") {
-            usuariosSpan.textContent = data.content;
+            usuariosSpan.textContent = data.content + " users online";
             return;
         }
 

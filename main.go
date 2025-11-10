@@ -18,6 +18,7 @@ type Client struct {
 	send     chan []byte
 	username string
 	hub      *Hub
+    lastMessage time.Time
 }
 
 // Hub mantiene el conjunto de clientes activos y difunde mensajes
@@ -61,7 +62,7 @@ func NewHub() *Hub {
 	return &Hub{
 		clients:    make(map[*Client]bool),
 		broadcast:  make(chan []byte, 256),
-		register:   chan(*Client),
+		register:   make(chan *Client),
 		unregister: make(chan *Client),
 	}
 }
